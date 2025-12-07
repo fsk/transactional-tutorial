@@ -1,0 +1,58 @@
+### Transaction Self-Invocation Module - HTTP Requests
+### Port: 8082
+### Self-Invocation Problemi ve Çözümleri
+
+### Variables
+@baseUrl = http://localhost:8082
+@contentType = application/json
+
+### PROBLEM: Self-invocation - Transaction çalışmaz
+### Aynı class içindeki @Transactional method neden çalışmaz?
+### Çünkü inner() çağrısı proxy üzerinden değil, transaction açılmaz
+POST {{baseUrl}}/api/self-invocation/problem
+Content-Type: {{contentType}}
+
+{
+  "name": "Problem Product",
+  "price": 99.99
+}
+
+###
+
+### ÇÖZÜM 1: @Transactional'ı outer metoda koymak
+### Transaction outer method'da açılır, inner method aynı transaction'a katılır
+POST {{baseUrl}}/api/self-invocation/solution1
+Content-Type: {{contentType}}
+
+{
+  "name": "Solution1 Product",
+  "price": 199.99
+}
+
+###
+
+### ÇÖZÜM 2: ApplicationContext üzerinden proxy çağrısı
+### Proxy'yi al ve onun üzerinden çağır
+POST {{baseUrl}}/api/self-invocation/solution2
+Content-Type: {{contentType}}
+
+{
+  "name": "Solution2 Product",
+  "price": 299.99
+}
+
+###
+
+### ÇÖZÜM 3: Ayrı service'e taşımak (EN İYİ ÇÖZÜM)
+### Single Responsibility Principle - En temiz çözüm
+POST {{baseUrl}}/api/self-invocation/solution3
+Content-Type: {{contentType}}
+
+{
+  "name": "Solution3 Product",
+  "price": 399.99
+}
+
+###
+
+

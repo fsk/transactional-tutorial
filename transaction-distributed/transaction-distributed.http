@@ -1,0 +1,27 @@
+### Transaction Distributed Systems Module - HTTP Requests
+### Port: 8093
+### Distributed Transaction Konuları (Saga Pattern, 2PC, Choreography, Orchestration, Compensation)
+
+### Variables
+@baseUrl = http://localhost:8093
+@contentType = application/json
+
+### Saga Orchestration Pattern testi
+### Merkezi orchestrator tüm adımları yönetir
+POST {{baseUrl}}/api/distributed/saga
+Content-Type: {{contentType}}
+
+{
+  "orderNumber": "ORD-001",
+  "amount": 1000.0
+}
+
+###
+
+### Saga Compensation testi
+### Başarısız adımlar için geri alma işlemleri
+POST {{baseUrl}}/api/distributed/compensate/{sagaId}
+
+###
+
+

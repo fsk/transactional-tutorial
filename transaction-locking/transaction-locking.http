@@ -1,0 +1,39 @@
+### Transaction Locking Module - HTTP Requests
+### Port: 8089
+### Transaction Locking Konuları (Optimistic, Pessimistic, Deadlock, Serialization Failure)
+
+### Variables
+@baseUrl = http://localhost:8089
+@contentType = application/json
+
+### 38. Optimistic locking
+### @Version alanı flush / commit sırasında kontrol edilir
+PUT {{baseUrl}}/api/locking/optimistic/1?newSalary=10000
+
+###
+
+### 39. Pessimistic locking
+### PESSIMISTIC_WRITE lock transaction commit / rollback'te bırakılır
+PUT {{baseUrl}}/api/locking/pessimistic/1?newSalary=10000
+
+###
+
+### 40. Serialization failure
+### SERIALIZABLE isolation'da DB conflict detection
+PUT {{baseUrl}}/api/locking/serialization/1?newSalary=10000
+
+###
+
+### 25. Deadlock testi
+### Transaction isolation deadlock'a neden olabilir
+POST {{baseUrl}}/api/locking/deadlock-test?idA=1&idB=2
+
+###
+
+### 25. Deadlock çözümü - Consistent lock ordering
+### Her zaman ID'ye göre sıralı kilitle
+POST {{baseUrl}}/api/locking/deadlock-solution?id1=1&id2=2
+
+###
+
+

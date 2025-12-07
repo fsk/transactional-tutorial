@@ -1,0 +1,107 @@
+### Transaction Propagation Module - HTTP Requests
+### Port: 8084
+### Transaction Propagation Türleri Öğrenme Modülü
+
+### Variables
+@baseUrl = http://localhost:8084
+@contentType = application/json
+
+### 1. REQUIRED: Varsa mevcut transaction'a katılır (DEFAULT)
+### Varsa mevcut transaction'a katılır, yoksa yeni açar
+POST {{baseUrl}}/api/propagation/required
+Content-Type: {{contentType}}
+
+{
+  "accountNumber": "ACC-001",
+  "balance": 1000.0,
+  "ownerName": "John Doe"
+}
+
+###
+
+### 2. REQUIRES_NEW: Yeni transaction açar
+### 
+### AKIŞ:
+### 1. Ana transaction başlar (REQUIRED) → Account kaydedilir (henüz commit yok)
+### 2. REQUIRES_NEW çağrılır → Ana transaction SUSPEND edilir (beklemede)
+### 3. Yeni transaction açılır → Balance güncellenir → COMMIT EDİLİR ✅
+### 4. Ana transaction devam eder (RESUME)
+### 5. Exception fırlatılır → Ana transaction ROLLBACK olur ❌
+###
+### SONUÇ:
+### ✅ Balance güncellemesi KALIR (REQUIRES_NEW commit edildi)
+### ❌ Account kaydı SİLİNİR (Ana transaction rollback oldu)
+###
+### ÖNEMLİ: Suspend edilen transaction bekler, yeni transaction bittikten sonra devam eder
+POST {{baseUrl}}/api/propagation/requires-new
+Content-Type: {{contentType}}
+
+{
+  "accountNumber": "ACC-002",
+  "balance": 2000.0,
+  "ownerName": "Jane Doe"
+}
+
+###
+
+### 3. SUPPORTS: Varsa katılır, yoksa transaction olmadan
+### Varsa mevcut transaction'a katılır, yoksa transaction olmadan çalışır
+POST {{baseUrl}}/api/propagation/supports
+Content-Type: {{contentType}}
+
+{
+  "accountNumber": "ACC-003",
+  "balance": 3000.0,
+  "ownerName": "Bob Smith"
+}
+
+###
+
+### 4. NOT_SUPPORTED: Transaction'ı suspend eder
+### Mevcut TX'i suspend eder, transaction olmadan çalışır
+POST {{baseUrl}}/api/propagation/not-supported
+Content-Type: {{contentType}}
+
+{
+  "accountNumber": "ACC-004",
+  "balance": 4000.0,
+  "ownerName": "Alice Brown"
+}
+
+###
+
+### 5. MANDATORY: Mevcut TX olmalı
+### Mevcut transaction olmalı, yoksa exception
+POST {{baseUrl}}/api/propagation/mandatory
+Content-Type: {{contentType}}
+
+{
+  "accountNumber": "ACC-005",
+  "balance": 5000.0,
+  "ownerName": "Charlie Wilson"
+}
+
+###
+
+### 6. REQUIRES_NEW - Mevcut transaction OLMADAN test
+### 
+### ÖNEMLİ: REQUIRES_NEW mevcut transaction'ın olmasını BEKLEMEZ!
+### 
+### Senaryo:
+### - Controller'dan direkt çağrılıyor (transaction YOK)
+### - REQUIRES_NEW direkt yeni transaction açacak
+### - Suspend edilecek bir transaction yok, direkt yeni açar
+###
+### Sonuç: Account başarıyla kaydedilir ve commit edilir
+POST {{baseUrl}}/api/propagation/requires-new-direct
+Content-Type: {{contentType}}
+
+{
+  "accountNumber": "ACC-006",
+  "balance": 6000.0,
+  "ownerName": "Test User"
+}
+
+###
+
+

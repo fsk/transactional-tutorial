@@ -1,0 +1,29 @@
+### Transaction Caching Module - HTTP Requests
+### Port: 8094
+### Transaction + Caching Konuları (Cache Coherence, Invalidation Strategies, Write-Through, Write-Behind)
+
+### Variables
+@baseUrl = http://localhost:8094
+@contentType = application/json
+
+### Cache tutarsızlığı - PROBLEM
+PUT {{baseUrl}}/api/caching/cache-problem/1?newPrice=99.99
+
+###
+
+### Cache tutarsızlığı - ÇÖZÜM
+PUT {{baseUrl}}/api/caching/cache-solution/1?newPrice=99.99
+
+###
+
+### Cache-Aside Pattern
+GET {{baseUrl}}/api/caching/product/1
+
+###
+
+### Cache invalidation
+DELETE {{baseUrl}}/api/caching/cache/1
+
+###
+
+

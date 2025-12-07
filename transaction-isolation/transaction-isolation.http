@@ -1,0 +1,52 @@
+### Transaction Isolation Module - HTTP Requests
+### Port: 8085
+### Transaction Isolation Level'ları Öğrenme Modülü
+
+### Variables
+@baseUrl = http://localhost:8085
+@contentType = application/json
+
+### 1. READ_COMMITTED testi - Non-repeatable read olabilir
+### Dirty read önlenir ama non-repeatable read ve phantom read olabilir (DEFAULT - PostgreSQL)
+PUT {{baseUrl}}/api/isolation/read-committed/1?quantity=50
+
+###
+
+### 2. REPEATABLE_READ testi - Non-repeatable read önlenir
+### Dirty read ve non-repeatable read önlenir, phantom read olabilir (MySQL default)
+PUT {{baseUrl}}/api/isolation/repeatable-read/1?quantity=75
+
+###
+
+### 3. SERIALIZABLE testi - Tüm problemler önlenir
+### Tüm isolation problemleri önlenir (en yavaş)
+PUT {{baseUrl}}/api/isolation/serializable/1?quantity=100
+
+###
+
+### 4. Phantom read testi - READ_COMMITTED
+### READ_COMMITTED'de phantom read olabilir
+GET {{baseUrl}}/api/isolation/phantom-read-read-committed?productName=Laptop
+
+###
+
+### 5. Phantom read testi - REPEATABLE_READ (PostgreSQL MVCC)
+### PostgreSQL MVCC ile phantom read önlenir
+GET {{baseUrl}}/api/isolation/phantom-read-repeatable-read?productName=Laptop
+
+###
+
+### 6. Yeni inventory ekleme
+### Test için yeni inventory kaydı oluştur
+POST {{baseUrl}}/api/isolation/create
+Content-Type: {{contentType}}
+
+{
+  "productName": "Laptop",
+  "quantity": 10,
+  "price": 999.99
+}
+
+###
+
+

@@ -1,0 +1,37 @@
+### Transaction Event Sourcing Module - HTTP Requests
+### Port: 8095
+### Transaction + Event Sourcing Konuları (Event Store, Snapshot, Replay, Consistency)
+
+### Variables
+@baseUrl = http://localhost:8095
+@contentType = application/json
+
+### Event Store'a event kaydetme
+POST {{baseUrl}}/api/eventsourcing/event
+Content-Type: {{contentType}}
+
+{
+  "aggregateId": "order-123",
+  "eventType": "OrderCreated",
+  "eventData": "{\"orderNumber\":\"ORD-001\",\"amount\":1000.0}"
+}
+
+###
+
+### Event Replay
+GET {{baseUrl}}/api/eventsourcing/replay/order-123
+
+###
+
+### Snapshot oluşturma
+POST {{baseUrl}}/api/eventsourcing/snapshot
+Content-Type: {{contentType}}
+
+{
+  "aggregateId": "order-123",
+  "snapshotData": "{\"orderNumber\":\"ORD-001\",\"amount\":1000.0,\"status\":\"PENDING\"}"
+}
+
+###
+
+

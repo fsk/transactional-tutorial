@@ -1,0 +1,23 @@
+### Transaction Monitoring Module - HTTP Requests
+### Port: 8100
+### Transaction + Monitoring Konuları (Metrics, Tracing, Observability, Performance Monitoring)
+
+### Variables
+@baseUrl = http://localhost:8100
+
+### Transaction performance monitoring
+POST {{baseUrl}}/api/monitoring/operation/test-operation
+
+###
+
+### Actuator metrics endpoint
+GET {{baseUrl}}/actuator/metrics
+
+###
+
+### Actuator health endpoint
+GET {{baseUrl}}/actuator/health
+
+###
+
+

@@ -1,0 +1,33 @@
+### Transaction Context Module - HTTP Requests
+### Port: 8087
+### Transaction Context Propagation (ThreadLocal, @Async, CompletableFuture)
+
+### Variables
+@baseUrl = http://localhost:8087
+@contentType = application/json
+
+### 33. Transaction context propagation (ThreadLocal)
+### Spring transaction ThreadLocal üzerinden taşınır
+POST {{baseUrl}}/api/context/threadlocal
+
+###
+
+### 33. @Async transaction context kaybı
+### Thread değişirse → context kaybolur
+POST {{baseUrl}}/api/context/async-problem
+
+###
+
+### 33. @Async çözümü
+### Async method kendi transaction'ına sahip olmalı
+POST {{baseUrl}}/api/context/async-solution
+
+###
+
+### 33. CompletableFuture transaction context kaybı
+### CompletableFuture transaction düşmanıdır
+POST {{baseUrl}}/api/context/completable-future
+
+###
+
+

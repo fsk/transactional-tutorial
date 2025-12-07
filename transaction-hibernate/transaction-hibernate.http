@@ -1,0 +1,39 @@
+### Transaction Hibernate Module - HTTP Requests
+### Port: 8088
+### Hibernate Transaction Konuları (Dirty Checking, Detached Entity, Lost Update, Flush vs Commit)
+
+### Variables
+@baseUrl = http://localhost:8088
+@contentType = application/json
+
+### 35. Hibernate dirty checking
+### Dirty checking flush sırasında çalışır
+PUT {{baseUrl}}/api/hibernate/dirty-checking/1
+
+###
+
+### 36. Detached entity merge
+### Detached entity save edilirse merge edilir, overwrite riski vardır
+PUT {{baseUrl}}/api/hibernate/detached-entity/1
+
+###
+
+### 37. Lost Update problemi
+### Read → modify → write pattern, son yazan kazanır
+PUT {{baseUrl}}/api/hibernate/lost-update/1?increment=1000
+
+###
+
+### 20. Flush vs Commit testi
+### Flush = SQL gönderimi, Commit = transaction kalıcılaştırma
+POST {{baseUrl}}/api/hibernate/flush-vs-commit
+
+###
+
+### 21. Manual flush testi (Batch insert)
+### Büyük batch insert, constraint violation'ı erken görmek, memory pressure azaltmak
+POST {{baseUrl}}/api/hibernate/batch-insert
+
+###
+
+

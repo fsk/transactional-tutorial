@@ -1,0 +1,37 @@
+### Transaction Microservices Module - HTTP Requests
+### Port: 8097
+### Transaction + Microservices Konuları (Outbox Pattern, Idempotency, Circuit Breaker)
+
+### Variables
+@baseUrl = http://localhost:8097
+@contentType = application/json
+
+### Outbox Pattern testi
+POST {{baseUrl}}/api/microservices/order/outbox
+Content-Type: {{contentType}}
+
+{
+  "orderNumber": "ORD-001",
+  "totalAmount": 1000.0
+}
+
+###
+
+### Idempotent operation testi
+POST {{baseUrl}}/api/microservices/order/idempotent
+Content-Type: {{contentType}}
+
+{
+  "idempotencyKey": "unique-key-123",
+  "orderNumber": "ORD-002",
+  "totalAmount": 2000.0
+}
+
+###
+
+### Outbox message'ları işle
+POST {{baseUrl}}/api/microservices/outbox/process
+
+###
+
+

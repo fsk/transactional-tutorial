@@ -1,0 +1,25 @@
+### Transaction CQRS Module - HTTP Requests
+### Port: 8096
+### Transaction + CQRS Konuları (Command/Query Separation, Read/Write Models, Eventual Consistency)
+
+### Variables
+@baseUrl = http://localhost:8096
+@contentType = application/json
+
+### Command Handler - Write Model
+POST {{baseUrl}}/api/cqrs/order
+Content-Type: {{contentType}}
+
+{
+  "orderNumber": "ORD-001",
+  "totalAmount": 1000.0
+}
+
+###
+
+### Query Handler - Read Model
+GET {{baseUrl}}/api/cqrs/order/1
+
+###
+
+

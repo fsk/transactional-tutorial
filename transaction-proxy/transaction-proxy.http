@@ -1,0 +1,35 @@
+### Transaction Proxy Module - HTTP Requests
+### Port: 8081
+### @Transactional Proxy Mekanizması Öğrenme Modülü
+
+### Variables
+@baseUrl = http://localhost:8081
+@contentType = application/json
+
+### 1. @Transactional ile proxy üzerinden çağrı
+### Spring AOP proxy kullanır, transaction açılır
+POST {{baseUrl}}/api/proxy/with-transaction
+Content-Type: {{contentType}}
+
+{
+  "name": "Test User 4",
+  "email": "test4@example.com",
+  "age": 25
+}
+
+###
+
+### 2. Transaction olmadan çağrı
+### Repository method'u kendi transaction'ını açar (Spring Data JPA default)
+POST {{baseUrl}}/api/proxy/without-transaction
+Content-Type: {{contentType}}
+
+{
+  "name": "Test User 3",
+  "email": "test3@example.com",
+  "age": 30
+}
+
+###
+
+

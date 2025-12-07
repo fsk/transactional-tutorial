@@ -1,0 +1,365 @@
+### Transaction Advanced Module - HTTP Requests
+### Port: 8086
+### İleri Seviye Transaction Konuları
+
+### Variables
+@baseUrl = http://localhost:8086
+@contentType = application/json
+
+### ============================================
+### TEMEL KONULAR (7-15)
+### ============================================
+
+### 7. Read-only transaction testi
+### Hibernate flush kapatılır, dirty checking devre dışı
+GET {{baseUrl}}/api/advanced/employees
+
+###
+
+### 8. Normal transactional write
+POST {{baseUrl}}/api/advanced/employee
+Content-Type: {{contentType}}
+
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "department": "IT",
+  "salary": 5000.0
+}
+
+###
+
+### 9. Transaction timeout testi
+### Long-running transaction'ları önlemek için
+POST {{baseUrl}}/api/advanced/employee-timeout
+Content-Type: {{contentType}}
+
+{
+  "name": "Timeout Test",
+  "email": "timeout@example.com",
+  "department": "IT",
+  "salary": 6000.0
+}
+
+###
+
+### 10. @Async + @Transactional PROBLEM
+### Transaction thread-bound, @Async → farklı thread → transaction context kaybolur
+POST {{baseUrl}}/api/advanced/employee-async-problem
+Content-Type: {{contentType}}
+
+{
+  "name": "Async Problem",
+  "email": "async@example.com",
+  "department": "IT",
+  "salary": 7000.0
+}
+
+###
+
+### 11. @Async + @Transactional ÇÖZÜM
+### Async method kendi @Transactional'ına sahip olmalı
+POST {{baseUrl}}/api/advanced/employee-async-solution
+Content-Type: {{contentType}}
+
+{
+  "name": "Async Solution",
+  "email": "async2@example.com",
+  "department": "IT",
+  "salary": 8000.0
+}
+
+###
+
+### 12. Exception ile rollback testi
+### Method return etmeden exception fırlatılırsa rollback olur
+POST {{baseUrl}}/api/advanced/employee-exception
+Content-Type: {{contentType}}
+
+{
+  "name": "Exception Test",
+  "email": "exception@example.com",
+  "department": "IT",
+  "salary": 9000.0
+}
+
+###
+
+### 13. @TransactionalEventListener testi - AFTER_COMMIT
+### Gerçekten DB commit olduktan sonra çalışır
+POST {{baseUrl}}/api/advanced/notification
+Content-Type: {{contentType}}
+
+{
+  "message": "Test Notification",
+  "recipient": "user@example.com"
+}
+
+###
+
+### ============================================
+### İLERİ SEVİYE KONULAR (16-32)
+### ============================================
+
+### 16. @Transactional + private method testi
+### Proxy sadece public methodları keser, private → proxy göremez
+POST {{baseUrl}}/api/advanced/private-method
+
+###
+
+### 17. Final method testi
+### CGLIB proxy, final class / method'u override edemez
+POST {{baseUrl}}/api/advanced/final-method
+
+###
+
+### 20. Flush vs Commit testi
+### Flush = SQL gönderimi, Commit = transaction kalıcılaştırma
+POST {{baseUrl}}/api/advanced/flush-vs-commit
+
+###
+
+### 21. Manual flush testi (Batch insert)
+### Büyük batch insert, constraint violation'ı erken görmek, memory pressure azaltmak
+POST {{baseUrl}}/api/advanced/batch-insert
+
+###
+
+### 22. Nested transaction testi
+### Propagation.NESTED → savepoint (PostgreSQL desteklemez)
+POST {{baseUrl}}/api/advanced/nested-transaction
+
+###
+
+### 24. Cache tutarsızlığı - PROBLEM
+### Transaction rollback oldu ama cache güncellendi
+PUT {{baseUrl}}/api/advanced/cache-problem/1?newSalary=10000
+
+###
+
+### 24. Cache tutarsızlığı - ÇÖZÜM (AFTER_COMMIT)
+### Cache sadece transaction commit olduktan sonra güncellenir
+PUT {{baseUrl}}/api/advanced/cache-solution/1?newSalary=10000
+
+###
+
+### 25. Deadlock testi
+### Transaction isolation deadlock'a neden olabilir
+POST {{baseUrl}}/api/advanced/deadlock-test?idA=1&idB=2
+
+###
+
+### 25. Deadlock çözümü - Consistent lock ordering
+### Her zaman ID'ye göre sıralı kilitle
+POST {{baseUrl}}/api/advanced/deadlock-solution?id1=1&id2=2
+
+###
+
+### 26. Transaction propagation zinciri
+### A (REQUIRED) → B (REQUIRES_NEW) → C (REQUIRED)
+POST {{baseUrl}}/api/advanced/propagation-chain
+Content-Type: {{contentType}}
+
+{
+  "name": "Chain Test",
+  "email": "chain@example.com"
+}
+
+###
+
+### 27. Message gönderimi - PROBLEM
+### DB rollback olsa bile message gitmiş olabilir
+POST {{baseUrl}}/api/advanced/message-problem
+Content-Type: {{contentType}}
+
+{
+  "name": "Message Problem",
+  "email": "message@example.com"
+}
+
+###
+
+### 27. Message gönderimi - ÇÖZÜM (AFTER_COMMIT)
+### Message sadece transaction commit olduktan sonra gönderilir
+POST {{baseUrl}}/api/advanced/message-solution
+Content-Type: {{contentType}}
+
+{
+  "name": "Message Solution",
+  "email": "message2@example.com"
+}
+
+###
+
+### 29. Read-only transaction içinde write testi
+### readOnly = true iken save çağrılırsa Hibernate flush etmez
+POST {{baseUrl}}/api/advanced/read-only-write
+
+###
+
+### 30. Stream API tuzağı
+### Stream lazy evaluate, transaction scope dışına çıkabilir
+GET {{baseUrl}}/api/advanced/stream-trap
+
+###
+
+### 30. Stream API çözümü
+### Stream'i transaction içinde hemen evaluate et
+GET {{baseUrl}}/api/advanced/stream-solution
+
+###
+
+### ============================================
+### ÇOK İLERİ SEVİYE KONULAR (33-50)
+### ============================================
+
+### 33. Transaction context propagation (ThreadLocal)
+### Spring transaction ThreadLocal üzerinden taşınır
+POST {{baseUrl}}/api/advanced/context/threadlocal
+
+###
+
+### 33. @Async transaction context kaybı
+### Thread değişirse → context kaybolur
+POST {{baseUrl}}/api/advanced/context/async-problem
+
+###
+
+### 35. Hibernate dirty checking
+### Dirty checking flush sırasında çalışır
+PUT {{baseUrl}}/api/advanced/hibernate/dirty-checking/1
+
+###
+
+### 36. Detached entity merge
+### Detached entity save edilirse merge edilir, overwrite riski vardır
+PUT {{baseUrl}}/api/advanced/hibernate/detached-entity/1
+
+###
+
+### 37. Lost Update problemi
+### Read → modify → write pattern, son yazan kazanır
+PUT {{baseUrl}}/api/advanced/hibernate/lost-update/1?increment=1000
+
+###
+
+### 38. Optimistic locking
+### @Version alanı flush / commit sırasında kontrol edilir
+PUT {{baseUrl}}/api/advanced/locking/optimistic/1?newSalary=10000
+
+###
+
+### 39. Pessimistic locking
+### PESSIMISTIC_WRITE lock transaction commit / rollback'te bırakılır
+PUT {{baseUrl}}/api/advanced/locking/pessimistic/1?newSalary=10000
+
+###
+
+### 40. Serialization failure
+### SERIALIZABLE isolation'da DB conflict detection
+PUT {{baseUrl}}/api/advanced/locking/serialization/1?newSalary=10000
+
+###
+
+### 41. Retry transaction içinde (YANLIŞ)
+### Retry transaction dışında olmalı
+PUT {{baseUrl}}/api/advanced/retry/inside-transaction/1?newSalary=10000
+
+###
+
+### 42. Remote call transaction içinde (YANLIŞ)
+### Transaction boundary = DB only
+PUT {{baseUrl}}/api/advanced/remote/inside-transaction/1?newSalary=10000
+
+###
+
+### 44. Time-sensitive logic
+### Transaction uzun sürerse time-based logic bozulur
+PUT {{baseUrl}}/api/advanced/time-sensitive/1?newSalary=10000
+
+###
+
+### 45. Silent rollback
+### Transaction rollback oldu ama exception yok
+POST {{baseUrl}}/api/advanced/silent-rollback
+Content-Type: {{contentType}}
+
+{
+  "name": "Silent Test",
+  "email": "silent@example.com"
+}
+
+###
+
+### 49. Batch processing - YANLIŞ
+### Tek transaction ile büyük batch → persistence context şişer
+POST {{baseUrl}}/api/advanced/batch/wrong?count=1000
+
+###
+
+### 49. Batch processing - DOĞRU
+### Chunk processing + intermediate commit
+POST {{baseUrl}}/api/advanced/batch/correct?totalCount=1000&chunkSize=100
+
+###
+
+### ============================================
+### TEORİK KONULAR
+### ============================================
+
+### 18. Interface vs Class Annotation
+GET {{baseUrl}}/api/advanced/theory/interface-vs-class
+
+###
+
+### 23. Transaction boundary neden Controller'a kadar uzatılmaz? (OSIV)
+GET {{baseUrl}}/api/advanced/theory/transaction-boundary
+
+###
+
+### 28. @Transactional testlerde neden farklı davranır?
+GET {{baseUrl}}/api/advanced/theory/transactional-in-tests
+
+###
+
+### 31. Distributed transaction neden önerilmez?
+GET {{baseUrl}}/api/advanced/theory/distributed-transaction
+
+###
+
+### 32. Transaction vs Eventual Consistency karar kriterleri
+GET {{baseUrl}}/api/advanced/theory/transaction-vs-consistency
+
+###
+
+### 34. Transaction + Reactor (WebFlux) neden birlikte çalışmaz?
+GET {{baseUrl}}/api/advanced/theory/reactor-transaction
+
+###
+
+### 43. Event publishing transaction'dan ayrılır mı?
+GET {{baseUrl}}/api/advanced/theory/event-publishing
+
+###
+
+### 46. TransactionState neden loglarda görünmez?
+GET {{baseUrl}}/api/advanced/theory/transaction-logging
+
+###
+
+### 47. Transaction + JVM crash senaryosu
+GET {{baseUrl}}/api/advanced/theory/jvm-crash
+
+###
+
+### 48. Exactly-once semantics neden zordur?
+GET {{baseUrl}}/api/advanced/theory/exactly-once
+
+###
+
+### 50. Transaction'da olmaması gerekenler
+GET {{baseUrl}}/api/advanced/theory/what-not-in-transaction
+
+###
+
+

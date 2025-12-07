@@ -1,0 +1,118 @@
+### Transaction Patterns Module - HTTP Requests
+### Port: 8090
+### Transaction Pattern'leri (Retry, Remote Call, Batch, Silent Rollback, Cache, Message, Stream API)
+
+### Variables
+@baseUrl = http://localhost:8090
+@contentType = application/json
+
+### 16. @Transactional + private method testi
+POST {{baseUrl}}/api/patterns/private-method
+
+###
+
+### 17. Final method testi
+POST {{baseUrl}}/api/patterns/final-method
+
+###
+
+### 22. Nested transaction testi
+POST {{baseUrl}}/api/patterns/nested-transaction
+
+###
+
+### 29. Read-only transaction içinde write testi
+POST {{baseUrl}}/api/patterns/read-only-write
+
+###
+
+### 30. Stream API tuzağı testi
+GET {{baseUrl}}/api/patterns/stream-trap
+
+###
+
+### 30. Stream API çözümü
+GET {{baseUrl}}/api/patterns/stream-solution
+
+###
+
+### 41. Retry transaction içinde (YANLIŞ)
+PUT {{baseUrl}}/api/patterns/retry/inside-transaction/1?newSalary=10000
+
+###
+
+### 42. Remote call transaction içinde (YANLIŞ)
+PUT {{baseUrl}}/api/patterns/remote/inside-transaction/1?newSalary=10000
+
+###
+
+### 44. Time-sensitive logic
+PUT {{baseUrl}}/api/patterns/time-sensitive/1?newSalary=10000
+
+###
+
+### 45. Silent rollback
+POST {{baseUrl}}/api/patterns/silent-rollback
+Content-Type: {{contentType}}
+
+{
+  "name": "Silent Test",
+  "email": "silent@example.com"
+}
+
+###
+
+### 49. Batch processing - YANLIŞ
+POST {{baseUrl}}/api/patterns/batch/wrong?count=1000
+
+###
+
+### 49. Batch processing - DOĞRU
+POST {{baseUrl}}/api/patterns/batch/correct?totalCount=1000&chunkSize=100
+
+###
+
+### 27. Message gönderimi - PROBLEM
+POST {{baseUrl}}/api/patterns/message-problem
+Content-Type: {{contentType}}
+
+{
+  "name": "Message Problem",
+  "email": "message@example.com"
+}
+
+###
+
+### 27. Message gönderimi - ÇÖZÜM
+POST {{baseUrl}}/api/patterns/message-solution
+Content-Type: {{contentType}}
+
+{
+  "name": "Message Solution",
+  "email": "message2@example.com"
+}
+
+###
+
+### 24. Cache tutarsızlığı - PROBLEM
+PUT {{baseUrl}}/api/patterns/cache-problem/1?newSalary=10000
+
+###
+
+### 24. Cache tutarsızlığı - ÇÖZÜM
+PUT {{baseUrl}}/api/patterns/cache-solution/1?newSalary=10000
+
+###
+
+### 26. Transaction propagation zinciri
+POST {{baseUrl}}/api/patterns/propagation-chain
+Content-Type: {{contentType}}
+
+{
+  "name": "Chain Test",
+  "email": "chain@example.com"
+}
+
+###
+
+

@@ -1,0 +1,28 @@
+### Transaction Security Module - HTTP Requests
+### Port: 8099
+### Transaction + Security Konuları (Row-Level Security, Audit Trails, Data Encryption, Access Control)
+
+### Variables
+@baseUrl = http://localhost:8099
+@contentType = application/json
+
+### Audit trail ile employee oluşturma
+POST {{baseUrl}}/api/security/employee
+Content-Type: {{contentType}}
+
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "department": "IT",
+  "salary": 5000.0,
+  "userId": "user-123"
+}
+
+###
+
+### Audit trail ile employee güncelleme
+PUT {{baseUrl}}/api/security/employee/1?newSalary=6000.0&userId=user-123
+
+###
+
+

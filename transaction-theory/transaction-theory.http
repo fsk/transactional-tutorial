@@ -1,0 +1,63 @@
+### Transaction Theory Module - HTTP Requests
+### Port: 8091
+### Transaction Teorik Konuları (OSIV, JVM Crash, Exactly-once, Distributed Transaction, Best Practices)
+
+### Variables
+@baseUrl = http://localhost:8091
+
+### 18. Interface vs Class Annotation
+GET {{baseUrl}}/api/theory/interface-vs-class
+
+###
+
+### 23. Transaction boundary neden Controller'a kadar uzatılmaz? (OSIV)
+GET {{baseUrl}}/api/theory/transaction-boundary
+
+###
+
+### 28. @Transactional testlerde neden farklı davranır?
+GET {{baseUrl}}/api/theory/transactional-in-tests
+
+###
+
+### 31. Distributed transaction neden önerilmez?
+GET {{baseUrl}}/api/theory/distributed-transaction
+
+###
+
+### 32. Transaction vs Eventual Consistency karar kriterleri
+GET {{baseUrl}}/api/theory/transaction-vs-consistency
+
+###
+
+### 34. Transaction + Reactor (WebFlux) neden birlikte çalışmaz?
+GET {{baseUrl}}/api/theory/reactor-transaction
+
+###
+
+### 43. Event publishing transaction'dan ayrılır mı?
+GET {{baseUrl}}/api/theory/event-publishing
+
+###
+
+### 46. TransactionState neden loglarda görünmez?
+GET {{baseUrl}}/api/theory/transaction-logging
+
+###
+
+### 47. Transaction + JVM crash senaryosu
+GET {{baseUrl}}/api/theory/jvm-crash
+
+###
+
+### 48. Exactly-once semantics neden zordur?
+GET {{baseUrl}}/api/theory/exactly-once
+
+###
+
+### 50. Transaction'da olmaması gerekenler
+GET {{baseUrl}}/api/theory/what-not-in-transaction
+
+###
+
+

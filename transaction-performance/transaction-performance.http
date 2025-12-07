@@ -1,0 +1,23 @@
+### Transaction Performance Module - HTTP Requests
+### Port: 8098
+### Transaction + Performance Konuları (Connection Pooling, Query Optimization, Batch Operations, N+1 Problem)
+
+### Variables
+@baseUrl = http://localhost:8098
+
+### N+1 Problem - YANLIŞ
+GET {{baseUrl}}/api/performance/products/n-plus-one
+
+###
+
+### N+1 Problem - ÇÖZÜM (Fetch Join)
+GET {{baseUrl}}/api/performance/products/fetch-join
+
+###
+
+### Batch insert optimization
+POST {{baseUrl}}/api/performance/batch-insert?count=1000
+
+###
+
+
