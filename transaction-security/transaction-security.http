@@ -26,3 +26,4 @@ PUT {{baseUrl}}/api/security/employee/1?newSalary=6000.0&userId=user-123
 ###
 
 
+

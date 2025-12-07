@@ -53,14 +53,13 @@ public class NotificationService {
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleNotificationCreated(NotificationCreatedEvent event) {
         log.info("handleNotificationCreated - AFTER_COMMIT - Transaction commit olduktan sonra");
-        log.info("Notification ID: {}, Message: {}, Recipient: {}", 
-            event.getNotificationId(), event.getMessage(), event.getRecipient());
+        log.info("Notification ID: {}, Message: {}, Recipient: {}", event.notificationId(), event.message(), event.recipient());
         
         // Burada gerçek notification gönderme işlemi yapılabilir
         // Email, SMS, push notification vs.
         
         // Notification'ı sent olarak işaretle
-        notificationRepository.findById(event.getNotificationId())
+        notificationRepository.findById(event.notificationId())
             .ifPresent(notification -> {
                 notification.setSent(true);
                 notificationRepository.save(notification);
@@ -76,29 +75,8 @@ public class NotificationService {
     }
     
     // Event class
-    public static class NotificationCreatedEvent {
-        private final Long notificationId;
-        private final String message;
-        private final String recipient;
-        
-        public NotificationCreatedEvent(Long notificationId, String message, String recipient) {
-            this.notificationId = notificationId;
-            this.message = message;
-            this.recipient = recipient;
-        }
-        
-        public Long getNotificationId() {
-            return notificationId;
-        }
-        
-        public String getMessage() {
-            return message;
-        }
-        
-        public String getRecipient() {
-            return recipient;
-        }
-    }
+    public record NotificationCreatedEvent(Long notificationId, String message, String recipient) { }
 }
+
 
 

@@ -67,3 +67,4 @@ echo "📝 Logları görmek için: docker-compose logs -f [service-name]"
 echo "🛑 Durdurmak için: docker-compose down"
 
 
+

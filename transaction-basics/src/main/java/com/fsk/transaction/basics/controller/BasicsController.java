@@ -37,12 +37,7 @@ public class BasicsController {
      */
     @PostMapping("/employee")
     public ResponseEntity<Employee> createEmployee(@RequestBody EmployeeRequest request) {
-        Employee employee = employeeService.createEmployee(
-            request.name(),
-            request.email(),
-            request.department(),
-            request.salary()
-        );
+        Employee employee = employeeService.createEmployee(request.name(), request.email(), request.department(), request.salary());
         return ResponseEntity.ok(employee);
     }
     
@@ -56,12 +51,7 @@ public class BasicsController {
     @PostMapping("/employee-timeout")
     public ResponseEntity<String> createEmployeeWithTimeout(@RequestBody EmployeeRequest request) {
         try {
-            employeeService.createEmployeeWithTimeout(
-                request.name(),
-                request.email(),
-                request.department(),
-                request.salary()
-            );
+            employeeService.createEmployeeWithTimeout(request.name(), request.email(), request.department(), request.salary());
             return ResponseEntity.ok("Employee kaydedildi");
         } catch (Exception e) {
             return ResponseEntity.ok("Timeout hatası: " + e.getMessage());
@@ -78,12 +68,7 @@ public class BasicsController {
     @PostMapping("/employee-exception")
     public ResponseEntity<String> createEmployeeWithException(@RequestBody EmployeeRequest request) {
         try {
-            employeeService.createEmployeeWithException(
-                request.name(),
-                request.email(),
-                request.department(),
-                request.salary()
-            );
+            employeeService.createEmployeeWithException(request.name(), request.email(), request.department(), request.salary());
         } catch (RuntimeException e) {
             return ResponseEntity.ok("Exception fırlatıldı - Transaction ROLLBACK oldu! " + e.getMessage());
         }
@@ -102,10 +87,11 @@ public class BasicsController {
         notificationService.sendNotification(request.message(), request.recipient());
         return ResponseEntity.ok("Notification kaydedildi - Transaction commit olduktan sonra event dinlenecek");
     }
-    
-    // DTOs
+
+
     public record EmployeeRequest(String name, String email, String department, Double salary) {}
     public record NotificationRequest(String message, String recipient) {}
 }
+
 
 
